@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nacos
+  name: nacos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nacos
+  template:
+    metadata:
+      labels:
+        app: nacos
+    spec:
+      containers:
+      - env:
+        - name: MODE
+          value: standalone
+        - name: MYSQL_SERVICE_HOST
+          value: nacos-mysql
+        - name: MYSQL_SERVICE_PORT
+          value: "3306"
+        - name: MYSQL_SERVICE_USER
+          value: root
+        - name: MYSQL_SERVICE_PASSWORD
+          value: root
+        - name: MYSQL_SERVICE_DB_NAME
+          value: nacos_config
+        - name: SPRING_DATASOURCE_PLATFORM
+          value: mysql
+        image: nacos/nacos-server:latest
+        imagePullPolicy: Always
+        name: nacos
+        ports:
+        - containerPort: 9848
+          protocol: TCP
+        - containerPort: 9849
+          protocol: TCP
+        - containerPort: 8848
+          protocol: TCP
+      restartPolicy: Always
